@@ -1,5 +1,5 @@
-id,VEHICLE_YEAR ,VEHICLE_MAKE  ,VEHICLE_MODEL
-1,1992,Acura         ,Integra
+id,vehicle_year ,vehicle_make  ,vehicle_model
+1, 1992, Acura         ,Integra
 2,1992,Acura         ,Legend
 3,1992,Acura         ,NSX
 4,1992,Acura         ,Vigor
