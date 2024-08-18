@@ -47,19 +47,25 @@ const queryData = () => {
 }
 
 // Read the CSV file and insert data into the database
-fs.createReadStream('vehicle_data_partial.csv')
+fs.createReadStream('vehicle_data_with_id.csv')
   .pipe(csv({
     ski_empty_lines: true,
     columns: true,
-    bom: false
+    bom: true
   }
   ))
   .on('data', (row) => {
     insertData(row);
   })
+  .on('error', (err) => {
+    console.log('=== ERROR ===');
+    console.error(err.message);
+  })
   .on('end', () => {
     console.log('CSV file successfully processed and data inserted into the database.');
-    queryData();
+    
+    queryDataByMake('1995', 'Acura');
+    
     // Close the database connection
     db.close((err) => {
       if (err) {
@@ -68,3 +74,41 @@ fs.createReadStream('vehicle_data_partial.csv')
       console.log('Closed the database connection.');
     });
   });
+
+// const queryDataByYear = (year) => {
+//   sql = `SELECT * FROM vehicles where vehicle_year = ${year}`;
+  
+//   db.all(sql, [], (err, rows) => {
+//     if (err) {
+//       throw err;
+//     }
+//     rows.forEach((row) => {
+//       console.log('row');
+//       console.log(row);
+//     });
+//   });
+// }
+
+const queryDataByMake = (year) => {
+  sql = `SELECT * FROM vehicles where vehicle_year = '${year}'`;
+  // sql = 'SELECT * from vehicles where '; 
+  
+  console.log('sql: ', sql); 
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      console.error(err.message);
+      throw err;
+    }
+    rows.forEach((row) => {
+      console.log(row);
+    });
+  });
+
+  
+}
+
+// first select year and return vehicle makes, 
+// selecting vehicle make then filter make data for models
+
+// const result = queryDataByMake('1992', 'Acura'); 
+// console.log('RESULT: ', result); 
