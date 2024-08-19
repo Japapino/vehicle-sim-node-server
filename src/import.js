@@ -34,20 +34,8 @@ const insertData = (data) => {
   );
 };
 
-const queryData = () => {
-  sql = `SELECT * FROM vehicles where id < 50`;
-  db.all(sql, [], (err, rows) => {
-    if (err) {
-      throw err;
-    }
-    rows.forEach((row) => {
-      console.log(row);
-    });
-  });
-}
-
 // Read the CSV file and insert data into the database
-fs.createReadStream('vehicle_data_with_id.csv')
+fs.createReadStream('./src/public/data/vehicle_data_with_id.csv')
   .pipe(csv({
     ski_empty_lines: true,
     columns: true,
@@ -75,23 +63,8 @@ fs.createReadStream('vehicle_data_with_id.csv')
     });
   });
 
-// const queryDataByYear = (year) => {
-//   sql = `SELECT * FROM vehicles where vehicle_year = ${year}`;
-  
-//   db.all(sql, [], (err, rows) => {
-//     if (err) {
-//       throw err;
-//     }
-//     rows.forEach((row) => {
-//       console.log('row');
-//       console.log(row);
-//     });
-//   });
-// }
-
-const queryDataByMake = (year) => {
-  sql = `SELECT * FROM vehicles where vehicle_year = '${year}'`;
-  // sql = 'SELECT * from vehicles where '; 
+const queryDataByMake = (year, make) => {
+  sql = `SELECT * FROM vehicles where vehicle_year = '${year}' and vehicle_make = '${make}'`;
   
   console.log('sql: ', sql); 
   db.all(sql, [], (err, rows) => {
@@ -104,7 +77,6 @@ const queryDataByMake = (year) => {
     });
   });
 
-  
 }
 
 // first select year and return vehicle makes, 

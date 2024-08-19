@@ -18,13 +18,13 @@ const db = new sqlite3.Database('./vehicles.db', sqlite3.OPEN_READWRITE, (err) =
 // db.run(sql); 
 
 // insert data into table
-// sql = `INSERT INTO vehicles (make, model, year) VALUES (?, ?, ?)`; // notice the ? placeholders filled in with values in []
-// db.run(sql, ['Toyota', 'Corolla', '2019'], function(err) {
-//     if (err) {
-//         return console.error(err.message);
-//     }
-//     console.log(`Rows inserted ${this.changes}`);
-// });
+sql = `INSERT INTO vehicles (make, model, year) VALUES (?, ?, ?)`; // notice the ? placeholders filled in with values in []
+db.run(sql, ['Toyota', 'Corolla', '2019'], function(err) {
+    if (err) {
+        return console.error(err.message);
+    }
+    console.log(`Rows inserted ${this.changes}`);
+});
 
 // query data from db
 sql = `SELECT * FROM vehicles where id < 10`;     
@@ -38,20 +38,20 @@ db.all(sql, [], (err, rows) => {
 });
 
 // update data in db
-// sql = `UPDATE vehicles SET make = ? WHERE id = ?`;
-// db.run(sql, ['Honda', 1], function(err) {
-//     if (err) {
-//         return console.error(err.message);
-//     }
-//     console.log(`Rows updated ${this.changes}`);
-// });
+sql = `UPDATE vehicles SET make = ? WHERE id = ?`;
+db.run(sql, ['Honda', 1], function(err) {
+    if (err) {
+        return console.error(err.message);
+    }
+    console.log(`Rows updated ${this.changes}`);
+});
 
 // delete data from db
-// sql = `DELETE FROM vehicles WHERE id = ?`;
-// db.run(sql, [1], function(err) {
-//     if (err) {
-//         return console.error(err.message);
-//     }
-//     console.log(`Rows deleted ${this.changes}`);
-// });
+sql = `DELETE FROM vehicles WHERE id = ?`;
+db.run(sql, [1], function(err) {
+    if (err) {
+        return console.error(err.message);
+    }
+    console.log(`Rows deleted ${this.changes}`);
+});
 

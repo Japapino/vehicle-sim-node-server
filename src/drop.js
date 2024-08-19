@@ -11,3 +11,5 @@ const db = new sqlite3.Database('./vehicles.db', sqlite3.OPEN_READWRITE, (err) =
 
 sql = `DROP TABLE IF EXISTS vehicles`;
 db.run(sql);
+
+console.log('Table vehicles dropped.');
