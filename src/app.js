@@ -4,11 +4,13 @@ const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const config = require('../webpack.config.js');
 const compiler = webpack(config);
+const cors = require('cors')
 
 const app = express();
 const PORT = 3000;
 const sqlite3 = require('sqlite3').verbose();
 
+app.use(cors()); 
 app.use(express.json());
 
 app.use(
