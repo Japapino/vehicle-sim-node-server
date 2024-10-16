@@ -131,3 +131,5 @@ dist
 
 # db files
 *.db
+
+.package-lock.json

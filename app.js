@@ -2,9 +2,10 @@ const express = require("express");
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
-const config = require('../webpack.config.js');
+const config = require('./webpack.config.js');
 const compiler = webpack(config);
-const cors = require('cors')
+const cors = require('cors');
+const puppeteer = require('puppeteer-core')
 
 const app = express();
 const PORT = 3000;
@@ -26,10 +27,6 @@ let db = new sqlite3.Database("./vehicles.db", (err) => {
     console.error(err.message);
   }
   console.log("Connected to the SQLite database.");
-});
-
-app.get('/api', (req, res) => {
-  res.json({ message: 'Hello, world!' });
 });
 
 app.get("/vehicles/:year", (req, res) => {
@@ -59,3 +56,40 @@ app.get("/vehicles/:year/:make", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+app.get("/hello", function(req, res) {
+  res.send({
+    hello: "Hello World"
+  });
+});
+
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + '/public/page.html');
+});
+
+(async () => {
+  const browser = await puppeteer.launch({
+    executablePath: "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe"
+  }); 
+  const page = await browser.newPage(); 
+
+  await page.goto('https://www.youtube.com/feed/trending');
+
+  const youtubeTrending = await page.evaluate(() => {
+    const trendingElements = document.querySelectorAll('#video-title');
+
+    return Array.from(trendingElements).map((element) => {
+      const link = element.href;
+      return { link };
+    })
+  });
+
+  await browser.close(); 
+
+  app.get("/trending", (req, res) => {
+    console.log('hit');
+    res.send(youtubeTrending); 
+  });
+  
+})();
+
