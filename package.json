@@ -19,15 +19,16 @@
     },
     "devDependencies": {
         "nodemon": "^3.1.4",
-        "webpack": "^5.93.0",
+        "webpack": "^5.95.0",
         "webpack-cli": "^5.1.4",
-        "webpack-dev-middleware": "^7.4.0",
+        "webpack-dev-middleware": "^7.4.2",
         "webpack-dev-server": "^5.0.4",
         "webpack-hot-middleware": "^2.26.1",
         "webpack-node-externals": "^3.0.0"
     },
     "scripts": {
         "start": "nodemon",
-        "import": "node src/drop.js && node src/import.js"
+        "import": "node src/drop.js && node src/import.js",
+        "dev": "webpack serve --config webpack.config.js --hot"
     }
 }

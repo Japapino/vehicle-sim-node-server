@@ -87,9 +87,32 @@ app.get("/", (req, res) => {
   await browser.close(); 
 
   app.get("/trending", (req, res) => {
-    console.log('hit');
+
     res.send(youtubeTrending); 
   });
   
-})();
+});
 
+(async () => {
+  const browser = await puppeteer.launch({
+    executablePath: "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe",
+    headless: false, // Run in non-headless mode for debugging
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  }); 
+  const page = await browser.newPage(); 
+
+  await page.goto('https://www.edmunds.com/', { waitUntil: 'networkidle2', timeout: 60000 }); // Increase timeout and wait for network to be idle
+
+  const elements = await page.content(); 
+
+  await browser.close(); 
+
+  app.get("/estimate", (req, res) => {
+    console.log('done: ', elements); 
+    res.send(elements); 
+  });
+
+  app.listen(8080, () => {
+    console.log('Server is running on http://localhost:3000');
+  });
+})();
