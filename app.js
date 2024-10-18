@@ -117,15 +117,27 @@ async () => {
   const filteredStringData = (data) => {
     const jsonData = JSON.parse(data);
     const filteredData = jsonData.filter(item => item['@type'] === 'Vehicle');
-    return filteredData;
+    return formatData(filteredData);
   };
 
-  console.log("filtered data: ", typeof data);
+  const resultData = []; 
+
+  const formatData = (data) => {
+    data.forEach( (item) => {
+      resultData.push({
+        "itemCondition": item["itemCondition"],
+        "price": item["offers"]["price"],
+        "mileage": item["mileageFromOdometer"]
+      })
+    })
+  }; 
+
+  filteredStringData(data);
 
   await browser.close();
 
   app.get("/estimate", (req, res) => {
-    res.send(filteredStringData(data));
+    res.send(resultData);
   });
 
   app.listen(8080, () => {
