@@ -1,6 +1,6 @@
 # Vehicle Cost Estimator (Service) 
 
-This is a side project I created based on simulators I have developed for other companies. 
+This is a side project I created to learn the basics of web scraping with Puppeteer. 
 However, the vehicle selection data is incomplete and only includes years from 1992 to 2024.
 
 It uses Puppeteer to search Edmunds for similar vehicles, allowing users to get an idea of how much other vehicles are selling for.
