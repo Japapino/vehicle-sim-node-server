@@ -1,9 +1,14 @@
 # Vehicle Cost Estimator (Service) 
 
-This is a side project I created based on other simulators I have made for other compaines. 
-It uses Puppeteerto search Edmunds for similar vehicles so users can get an idea of how much other sales.
-This project is a back-end application built with [Express](http://expressjs.com/), [React](https://reactjs.org/), and [TypeScript](https://www.typescriptlang.org/). 
-It serves as the service for a vehicle cost estimator simulator and is designed to work with the `vehicle-sim-react-client` repository.
+This is a side project I created based on simulators I have developed for other companies. 
+However, the vehicle selection data is incomplete and only includes years from 1992 to 2024.
+
+It uses Puppeteer to search Edmunds for similar vehicles, allowing users to get an idea of how much other vehicles are selling for.
+
+As of 10/12/2024, the vehicle selection endpoints and estimation functions are working.
+
+This project is a back-end application built with Express, React, and TypeScript. 
+It serves as the service for a vehicle cost estimator simulator and is designed to work with the vehicle-sim-react-client repository.
 
 ## Features
 
