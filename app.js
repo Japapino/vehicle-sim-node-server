@@ -53,6 +53,68 @@ app.get("/vehicles/:year/:make", (req, res) => {
   });
 });
 
+const getEstimate = async ( year, make, model ) => { 
+  const browser = await puppeteer.launch({
+    executablePath:
+      "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe",
+    headless: false, 
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
+  const page = await browser.newPage();
+
+  const link =
+    `https://www.edmunds.com/inventory/srp.html?year=${year}-${year}&make=${make}&model=${make}%7C${model}`;
+
+  await page.goto(link, { waitUntil: "networkidle2", timeout: 60000 });
+
+  const data = await page.evaluate(() => {
+    const scriptTag = document.querySelector(
+      'script[type="application/ld+json"'
+    ); 
+    return scriptTag ? scriptTag.innerText : null;
+  });
+
+  const filteredStringData = (data) => {
+    const jsonData = JSON.parse(data);
+    const filteredData = jsonData.filter(item => item['@type'] === 'Vehicle');
+    return formatData(filteredData);
+  };
+
+  const resultData = []; 
+
+  const formatData = (data) => {
+    data.forEach((item) => {
+      resultData.push({
+        "itemCondition": item["itemCondition"] ?? undefined,
+        "price": item["offers"]["price"] ?? undefined,
+        "mileage": item["mileageFromOdometer"] ?? undefined,
+        "configuration": item['vehicleConfiguration'] ?? undefined,
+        "knownVehicleDamages": item['knownVehicleDamages'] ?? undefined,
+        "numberOfPreviousOwners": item['numberOfPreviousOwners'] ?? undefined,
+        "image": item["image"]
+      })
+    })
+  }; 
+
+  filteredStringData(data);
+
+  await browser.close();
+
+  return resultData; 
+
+};
+
+app.get("/estimate/:year/:make/:model", (req, res) => {
+
+  const { year, make, model } = req.params;
+
+  console.log('params: ', req.params); 
+
+  const resultData = getEstimate(year, make, model); 
+
+  res.send(resultData);
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
@@ -92,58 +154,3 @@ async () => {
   });
 };
 
-(async () => {
-  const browser = await puppeteer.launch({
-    executablePath:
-      "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe",
-    headless: false, 
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  });
-  const page = await browser.newPage();
-
-  const link =
-    "https://www.edmunds.com/inventory/srp.html?year=2012-2012&make=honda&model=honda%7Ccivic&trim=civic%7Cex";
-
-  await page.goto(link, { waitUntil: "networkidle2", timeout: 60000 });
-
-  const data = await page.evaluate(() => {
-    const scriptTag = document.querySelector(
-      'script[type="application/ld+json"'
-    ); 
-    return scriptTag ? scriptTag.innerText : null;
-  });
-
-  const filteredStringData = (data) => {
-    const jsonData = JSON.parse(data);
-    const filteredData = jsonData.filter(item => item['@type'] === 'Vehicle');
-    return formatData(filteredData);
-  };
-
-  const resultData = []; 
-
-  const formatData = (data) => {
-    data.forEach( (item) => {
-      resultData.push({
-        "itemCondition": item["itemCondition"] ?? 'No data',
-        "price": item["offers"]["price"] ?? 'No data',
-        "mileage": item["mileageFromOdometer"] ?? 'No data',
-        "configuration": item['vehicleConfiguration'] ?? 'No data',
-        "knownVehicleDamages": item['knownVehicleDamages'] ?? 'No data',
-        "numberOfPreviousOwners": item['numberOfPreviousOwners'] ?? 'No data',
-        "image": item["image"]
-      })
-    })
-  }; 
-
-  filteredStringData(data);
-
-  await browser.close();
-
-  app.get("/estimate", (req, res) => {
-    res.send(resultData);
-  });
-
-  app.listen(8080, () => {
-    console.log("Server is running on http://localhost:3000");
-  });
-})();

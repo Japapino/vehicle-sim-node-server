@@ -1,5 +1,7 @@
 # Vehicle Cost Estimator (Service) 
 
+This is a side project I created based on other simulators I have made for other compaines. 
+It uses Puppeteerto search Edmunds for similar vehicles so users can get an idea of how much other sales.
 This project is a back-end application built with [Express](http://expressjs.com/), [React](https://reactjs.org/), and [TypeScript](https://www.typescriptlang.org/). 
 It serves as the service for a vehicle cost estimator simulator and is designed to work with the `vehicle-sim-react-client` repository.
 
@@ -13,7 +15,7 @@ It serves as the service for a vehicle cost estimator simulator and is designed 
 
 ## Future Features
 
-- 🚗 **Enhanced Vehicle Data** - Integration with more comprehensive vehicle data sources.
+- 🚗 **Enhanced Vehicle Data** - Add trim selection and integration with more comprehensive vehicle data sources.
 - 📊 **Advanced Analytics** - Vehicle loan calculator along with more vehicle statistics like resale and number still on the road/registered
 - 📱 **Mobile Compatibility** - Improved compatibility with mobile devices.
 
