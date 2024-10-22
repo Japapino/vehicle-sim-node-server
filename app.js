@@ -104,13 +104,12 @@ async () => {
   const link =
     "https://www.edmunds.com/inventory/srp.html?year=2012-2012&make=honda&model=honda%7Ccivic&trim=civic%7Cex";
 
-  await page.goto(link, { waitUntil: "networkidle2", timeout: 60000 }); // Increase timeout and wait for network to be idle
+  await page.goto(link, { waitUntil: "networkidle2", timeout: 60000 });
 
-  // const elements = await page.content();
   const data = await page.evaluate(() => {
     const scriptTag = document.querySelector(
       'script[type="application/ld+json"'
-    ); // Adjust the selector as needed
+    ); 
     return scriptTag ? scriptTag.innerText : null;
   });
 
@@ -125,9 +124,13 @@ async () => {
   const formatData = (data) => {
     data.forEach( (item) => {
       resultData.push({
-        "itemCondition": item["itemCondition"],
-        "price": item["offers"]["price"],
-        "mileage": item["mileageFromOdometer"]
+        "itemCondition": item["itemCondition"] ?? 'No data',
+        "price": item["offers"]["price"] ?? 'No data',
+        "mileage": item["mileageFromOdometer"] ?? 'No data',
+        "configuration": item['vehicleConfiguration'] ?? 'No data',
+        "knownVehicleDamages": item['knownVehicleDamages'] ?? 'No data',
+        "numberOfPreviousOwners": item['numberOfPreviousOwners'] ?? 'No data',
+        "image": item["image"]
       })
     })
   }; 
