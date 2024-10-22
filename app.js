@@ -104,13 +104,14 @@ const getEstimate = async ( year, make, model ) => {
 
 };
 
-app.get("/estimate/:year/:make/:model", (req, res) => {
-
-  const { year, make, model } = req.params;
+app.get("/estimate/:year/:make/:model", async (req, res) => {
 
   console.log('params: ', req.params); 
+  const { year, make, model } = req.params;
 
-  const resultData = getEstimate(year, make, model); 
+  const resultData = await getEstimate(year, make, model); 
+
+  console.log('resultData: ', resultData); 
 
   res.send(resultData);
 });

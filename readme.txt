@@ -9,8 +9,8 @@ It serves as the service for a vehicle cost estimator simulator and is designed 
 
 - ⚡ **Express** - Fast, optimized bundling and development.
 - ⚛️ **React** - Efficient UI building.
-- 🟦 **TypeScript** - Ensures type-safe JavaScript.
 - 💅 **SCSS** - Built-in support for SCSS for styling.
+- 🤖 **Puppeteer** - Web scraping and automation for data extraction.
 
 
 ## Future Features
@@ -18,6 +18,7 @@ It serves as the service for a vehicle cost estimator simulator and is designed 
 - 🚗 **Enhanced Vehicle Data** - Add trim selection and integration with more comprehensive vehicle data sources.
 - 📊 **Advanced Analytics** - Vehicle loan calculator along with more vehicle statistics like resale and number still on the road/registered
 - 📱 **Mobile Compatibility** - Improved compatibility with mobile devices.
+- 🔄 **Convert to TypeScript** - Convert the entire codebase to TypeScript for better type safety and maintainability.
 
 ### Prerequisites
 
