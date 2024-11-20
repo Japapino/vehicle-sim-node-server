@@ -29,6 +29,7 @@ let db = new sqlite3.Database("./vehicles.db", (err) => {
   console.log("Connected to the SQLite database.");
 });
 
+// get vehicle makes based on year
 app.get("/vehicles/:year", (req, res) => {
   const { year } = req.params;
   const query = `SELECT DISTINCT vehicle_make FROM vehicles WHERE vehicle_year = ?`;
@@ -36,7 +37,9 @@ app.get("/vehicles/:year", (req, res) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json(rows || []);
+    let makes = rows.map(make => make.vehicle_make)
+
+    res.json(makes || []);
   });
 });
 
@@ -49,7 +52,10 @@ app.get("/vehicles/:year/:make", (req, res) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({ vehicles: rows });
+
+    let models = rows.map(model => model.vehicle_model)
+
+    res.json(models || []);
   });
 });
 
@@ -130,6 +136,7 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/page.html");
 });
 
+// puppeteer
 async () => {
   const browser = await puppeteer.launch({
     executablePath:
