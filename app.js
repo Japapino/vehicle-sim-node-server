@@ -37,7 +37,7 @@ app.get("/vehicles/:year", (req, res) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    let makes = rows.map(make => make.vehicle_make)
+    let makes = rows.map((make) => make.vehicle_make);
 
     res.json(makes || []);
   });
@@ -53,71 +53,68 @@ app.get("/vehicles/:year/:make", (req, res) => {
       return res.status(500).json({ error: err.message });
     }
 
-    let models = rows.map(model => model.vehicle_model)
+    let models = rows.map((model) => model.vehicle_model);
 
     res.json(models || []);
   });
 });
 
-const getEstimate = async ( year, make, model ) => { 
+const getEstimate = async (year, make, model) => {
   const browser = await puppeteer.launch({
     executablePath:
       "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe",
-    headless: false, 
+    headless: false,
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
   const page = await browser.newPage();
 
-  const link =
-    `https://www.edmunds.com/inventory/srp.html?year=${year}-${year}&make=${make}&model=${make}%7C${model}`;
+  const link = `https://www.edmunds.com/inventory/srp.html?year=${year}-${year}&make=${make}&model=${make}%7C${model}`;
 
   await page.goto(link, { waitUntil: "networkidle2", timeout: 60000 });
 
   const data = await page.evaluate(() => {
     const scriptTag = document.querySelector(
       'script[type="application/ld+json"'
-    ); 
+    );
     return scriptTag ? scriptTag.innerText : null;
   });
 
   const filteredStringData = (data) => {
     const jsonData = JSON.parse(data);
-    const filteredData = jsonData.filter(item => item['@type'] === 'Vehicle');
+    const filteredData = jsonData.filter((item) => item["@type"] === "Vehicle");
     return formatData(filteredData);
   };
 
-  const resultData = []; 
+  const resultData = [];
 
   const formatData = (data) => {
     data.forEach((item) => {
       resultData.push({
-        "itemCondition": item["itemCondition"] ?? undefined,
-        "price": item["offers"]["price"] ?? undefined,
-        "mileage": item["mileageFromOdometer"] ?? undefined,
-        "configuration": item['vehicleConfiguration'] ?? undefined,
-        "knownVehicleDamages": item['knownVehicleDamages'] ?? undefined,
-        "numberOfPreviousOwners": item['numberOfPreviousOwners'] ?? undefined,
-        "image": item["image"]
-      })
-    })
-  }; 
+        itemCondition: item["itemCondition"] ?? undefined,
+        price: item["offers"]["price"] ?? undefined,
+        mileage: item["mileageFromOdometer"] ?? undefined,
+        configuration: item["vehicleConfiguration"] ?? undefined,
+        knownVehicleDamages: item["knownVehicleDamages"] ?? undefined,
+        numberOfPreviousOwners: item["numberOfPreviousOwners"] ?? undefined,
+        image: item["image"],
+      });
+    });
+  };
 
   filteredStringData(data);
 
   await browser.close();
 
-  return resultData; 
-
+  return resultData;
 };
 
 app.get("/estimate/:year/:make/:model", async (req, res) => {
-
-  console.log('params: ', req.params); 
+  console.log("params: ", req.params);
   const { year, make, model } = req.params;
 
-  const resultData = await getEstimate(year, make, model); 
+  const resultData = await getEstimate(year, make, model);
 
-  console.log('resultData: ', resultData); 
+  console.log("resultData: ", resultData);
 
   res.send(resultData);
 });
@@ -133,7 +130,9 @@ app.get("/hello", function (req, res) {
 });
 
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/public/page.html");
+  res.send({
+    hello: "Hello World",
+  });
 });
 
 // puppeteer
@@ -161,4 +160,3 @@ async () => {
     res.send(youtubeTrending);
   });
 };
-

@@ -1,0 +1,37 @@
+# Node modules - No need to include the local node_modules folder (it'll be rebuilt in the container)
+node_modules
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Coverage reports (for testing)
+coverage/
+
+# IDE or editor specific files
+.vscode/
+.idea/
+
+# Build artifacts (if any)
+dist/
+build/
+
+# Test directories or files
+tests/
+test/
+
+# Dockerfile or .dockerignore itself (don't include Docker build files in the container)
+Dockerfile
+.dockerignore
